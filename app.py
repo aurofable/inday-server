@@ -51,6 +51,16 @@ def client():
     return render_template('client.html', token=token,
             configuration_error=configuration_error)
 
+# Twilio Authentication for iOS Client
+@app.route('/auth')
+def auth():
+    capability = TwilioCapability(app.config['TWILIO_ACCOUNT_SID'],
+        app.config['TWILIO_AUTH_TOKEN'])
+    capability.allow_client_incoming("swarm_user")
+    capability.allow_client_outgoing(app.config['TWILIO_APP_SID'])
+    token = capability.generate()
+    return str(token)
+
 
 # Installation success page
 @app.route('/')
@@ -58,7 +68,8 @@ def index():
     params = {
         'voice_request_url': url_for('.voice', _external=True),
         'sms_request_url': url_for('.sms', _external=True),
-        'client_url': url_for('.client', _external=True)}
+        'client_url': url_for('.client', _external=True),
+        'auth_url': url_for('.auth', _external=True)}
     return render_template('index.html', params=params)
 
 
