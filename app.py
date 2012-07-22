@@ -18,26 +18,15 @@ app.config.from_pyfile('local_settings.py')
 @app.route('/voice', methods=['GET', 'POST'])
 def voice():
     caller_id = "+16099526377"
+    actionURL = '/trans'
     if request.method == 'GET':
         from_client_number = request.args.get('PhoneNumber')
     else:
         from_client_number = request.form['PhoneNumber']
-    from_number = "+14124252207"
     response = twiml.Response()
-    #response.say("Congratulations! You deployed the Twilio Hackpack" \
-    #        " for Heroku and Flask.")
-    
-    #with response.dial(callerId = caller_id) as r: 
-    #    r.number(from_number)
-    #    r.record(True)
-
-    response.dial(callerId = caller_id, number = from_number, record = True)
-
-    #response.dial(from_number)
-    print 'Request is ' + str(request)
-    print 'Request in json is: ' + str(request.json)
+    response.say("Logged In")
+    response.dial(action = actionURL, callerId = caller_id, number = from_client_number, record = True)
     print 'Phone number from client is ' + str(from_client_number)
-    print 'PhoneNumber is ' + str(from_number)
     print str(response)
     print '\n'
     return str(response)
@@ -82,7 +71,20 @@ def auth():
     return str(token)
 
 
-# Installation success page
+# Transcription
+@app.route('/trans')
+def trans():
+    print 'Trans called!'
+    if request.method == 'GET':
+        recURL = request.args.get('RecordingUrl')
+    else:
+        recURL = request.form['RecordingUrl']
+    print recURL
+
+
+
+
+# Index page
 @app.route('/')
 def index():
     params = {
