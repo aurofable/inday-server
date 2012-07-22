@@ -18,18 +18,22 @@ app.config.from_pyfile('local_settings.py')
 @app.route('/voice', methods=['GET', 'POST'])
 def voice():
     caller_id = "+16099526377"
-    from_client_number = request.form['PhoneNumber']
+    from_client_number = request.args.get('PhoneNumber')
     from_number = "+14124252207"
     response = twiml.Response()
     #response.say("Congratulations! You deployed the Twilio Hackpack" \
     #        " for Heroku and Flask.")
     
-    with response.dial(callerId = caller_id) as r: 
-        r.number(from_number)
-        r.record(True)
+    #with response.dial(callerId = caller_id) as r: 
+    #    r.number(from_number)
+    #    r.record(True)
+
+    response.dial(callerId = caller_id, number = from_number, record = True)
+
     #response.dial(from_number)
     print 'Request is ' + str(request)
     print 'Request in json is: ' + str(request.json)
+    print 'Phone number from client is ' + str(from_client_number)
     print 'PhoneNumber is ' + str(from_number)
     print str(response)
     print '\n'
