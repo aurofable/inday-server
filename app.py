@@ -18,7 +18,8 @@ app.config.from_pyfile('local_settings.py')
 @app.route('/voice', methods=['GET', 'POST'])
 def voice():
     caller_id = "+16099526377"
-    from_number = request.args.get('PhoneNumber', None)
+    #from_number = request.args.get('PhoneNumber', None)
+    from_number = "+14124252207"
     response = twiml.Response()
     #response.say("Congratulations! You deployed the Twilio Hackpack" \
     #        " for Heroku and Flask.")
