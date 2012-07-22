@@ -17,11 +17,13 @@ app.config.from_pyfile('local_settings.py')
 # Voice Request URL
 @app.route('/voice', methods=['GET', 'POST'])
 def voice():
-    from_number = request.args.get('From', None)
+    from_number = request.args.get('PhoneNumber', None)
     response = twiml.Response()
-    response.say("Congratulations! You deployed the Twilio Hackpack" \
-            " for Heroku and Flask.")
-    return str(from_number)
+    #response.say("Congratulations! You deployed the Twilio Hackpack" \
+    #        " for Heroku and Flask.")
+    response.dial(from_number)
+    return response
+    #return str(from_number)
 
 
 # SMS Request URL
