@@ -18,7 +18,7 @@ app.config.from_pyfile('local_settings.py')
 @app.route('/voice', methods=['GET', 'POST'])
 def voice():
     caller_id = "+16099526377"
-    #from_number = request.args.get('PhoneNumber', None)
+    from_client_number = request.form['PhoneNumber']
     from_number = "+14124252207"
     response = twiml.Response()
     #response.say("Congratulations! You deployed the Twilio Hackpack" \
@@ -29,6 +29,7 @@ def voice():
         r.record(True)
     #response.dial(from_number)
     print 'Request is ' + str(request)
+    print 'Request in json is: ' + str(request.json)
     print 'PhoneNumber is ' + str(from_number)
     print str(response)
     print '\n'
