@@ -72,7 +72,7 @@ def auth():
 
 
 # Transcription
-@app.route('/trans')
+@app.route('/trans', methods=['GET', 'POST'])
 def trans():
     print 'Trans called!'
     if request.method == 'GET':
