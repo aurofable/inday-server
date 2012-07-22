@@ -80,6 +80,10 @@ def trans():
     else:
         recURL = request.form['RecordingUrl']
     print recURL
+    response = twiml.Response()
+    response.say("Transcribing")
+    return str(response)
+    
 
 
 
@@ -91,7 +95,8 @@ def index():
         'voice_request_url': url_for('.voice', _external=True),
         'sms_request_url': url_for('.sms', _external=True),
         'client_url': url_for('.client', _external=True),
-        'auth_url': url_for('.auth', _external=True)}
+        'auth_url': url_for('.auth', _external=True),
+        'trans_url': url_for('.trans', _external=True)}
     return render_template('index.html', params=params)
 
 
