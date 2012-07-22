@@ -27,7 +27,8 @@ def voice():
     with response.dial(callerId = caller_id) as r: 
         r.number(from_number)
     #response.dial(from_number)
-    print '\nPhoneNumber is ' + str(from_number) + '\n'
+    print 'Request is ' + str(request)
+    print 'PhoneNumber is ' + str(from_number)
     print str(response)
     print '\n'
     return str(response)
