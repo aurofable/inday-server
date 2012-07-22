@@ -17,6 +17,7 @@ app.config.from_pyfile('local_settings.py')
 # Voice Request URL
 @app.route('/voice', methods=['GET', 'POST'])
 def voice():
+    print request
     response = twiml.Response()
     response.say("Congratulations! You deployed the Twilio Hackpack" \
             " for Heroku and Flask.")
