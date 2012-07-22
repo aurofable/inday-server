@@ -18,7 +18,10 @@ app.config.from_pyfile('local_settings.py')
 @app.route('/voice', methods=['GET', 'POST'])
 def voice():
     caller_id = "+16099526377"
-    from_client_number = request.args.get('PhoneNumber')
+    if request.method == 'GET':
+        from_client_number = request.args.get('PhoneNumber')
+    else:
+        from_client_number = request.form['PhoneNumber']
     from_number = "+14124252207"
     response = twiml.Response()
     #response.say("Congratulations! You deployed the Twilio Hackpack" \
