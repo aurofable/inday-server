@@ -22,8 +22,7 @@ def voice():
     #response.say("Congratulations! You deployed the Twilio Hackpack" \
     #        " for Heroku and Flask.")
     response.dial(from_number)
-    return response
-    #return str(from_number)
+    return str(response)
 
 
 # SMS Request URL
