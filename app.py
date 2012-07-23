@@ -85,9 +85,6 @@ def trans():
     return str(response)
     
 
-
-
-
 # Index page
 @app.route('/')
 def index():
