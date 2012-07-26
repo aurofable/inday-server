@@ -99,9 +99,23 @@ def trans():
     print 'Trans called!'
     if request.method == 'GET':
         recURL = request.args.get('RecordingUrl')
+        duration = request.args.get('DialCallDuration')
+        sid = request.args.get('DialCallSid')
+        status = request.args.get('DialCallStatus')
     else:
         recURL = request.form['RecordingUrl']
-    print recURL
+        duration = request.form['DialCallDuration']
+        sid = request.form['DialCallSid']
+        status = request.form['DialCallStatus']
+
+    note = Note(sid, status, duration, recURL)
+    db.session.add(note)
+    db.session.commit()
+
+    print "\n"
+    print note
+    print Note.query.all()
+
     response = twiml.Response()
     response.say("Transcribing")
     return str(response)
