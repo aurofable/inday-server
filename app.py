@@ -140,13 +140,17 @@ def trans():
 # Database
 @app.route('/data', methods=['GET', 'POST'])
 def data():
-    print 'Database view!'
-    print str([Note.query.all()])
-    print 'Should have printed the queries!'
     if (len(Note.query.all()) == 0):
-        print 'Database empty'
         return 'Database empty'
-    return jsonify(values=[i.serialize for i in Note.query.all()]) 
+    return jsonify(values=[i.serialize for i in Note.query.all()])
+
+# Clear Database
+@app.route('/clear', methods=['GET', 'POST'])
+def clear():
+   for note in Note.query.all():
+       db.session.delete(note)
+   db.session.commit()
+   return 'Databse Cleared'
 
 # Index page
 @app.route('/')
