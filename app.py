@@ -61,8 +61,13 @@ def voice():
     actionURL = '/trans'
     if request.method == 'GET':
         from_client_number = request.args.get('PhoneNumber')
+        recurl = request.args.get('recurl')
     else:
         from_client_number = request.form['PhoneNumber']
+        recurl = request.form['recurl']
+
+    print 'RECURL is ' + str(recurl)
+
     response = twiml.Response()
     response.say("Logged In")
     response.dial(action = actionURL, callerId = caller_id, number = from_client_number, record = True)
