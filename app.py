@@ -67,6 +67,7 @@ def voice():
         #recurl = request.form['recurl']
 
     #print 'RECURL is ' + str(recurl)
+    #Native working now!
 
     response = twiml.Response()
     response.say("Logged In")
