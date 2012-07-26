@@ -14,7 +14,7 @@ from twilio.util import TwilioCapability
 app = Flask(__name__, static_url_path='/static')
 app.config.from_pyfile('local_settings.py')
 db = SQLAlchemy(app)
-
+db.create_all()
 
 # Class for DB
 class Note(db.Model):
@@ -107,17 +107,21 @@ def trans():
         duration = request.form['DialCallDuration']
         sid = request.form['DialCallSid']
         status = request.form['DialCallStatus']
-
+    
+    recURL = "asdfsadfadsf"
+    duration = 5
+    sid = "asdkfsadlkjfadsf"
+    status = "testing"
+    
     note = Note(sid, status, duration, recURL)
     db.session.add(note)
     db.session.commit()
 
-    print "\n"
     print note
     print Note.query.all()
 
     response = twiml.Response()
-    response.say("Transcribing")
+    response.say("Recorded")
     return str(response)
     
 
@@ -126,7 +130,6 @@ def trans():
 def index():
     params = {
         'voice_request_url': url_for('.voice', _external=True),
-        'sms_request_url': url_for('.sms', _external=True),
         'client_url': url_for('.client', _external=True),
         'auth_url': url_for('.auth', _external=True),
         'trans_url': url_for('.trans', _external=True)}
@@ -139,3 +142,4 @@ if __name__ == '__main__':
     if port == 5000:
         app.debug = True
     app.run(host='0.0.0.0', port=port)
+    db.create_all()
