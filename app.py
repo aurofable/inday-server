@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import url_for
 from flask import request
+from flask.ext.sqlalchemy import SQLAlchemy
 
 from twilio import twiml
 from twilio.util import TwilioCapability
@@ -12,6 +13,27 @@ from twilio.util import TwilioCapability
 # Declare and configure application
 app = Flask(__name__, static_url_path='/static')
 app.config.from_pyfile('local_settings.py')
+db = SQLAlchemy(app)
+
+
+# Class for DB
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sid = db.Column(db.String(80), unique=True)
+    status = db.Column(db.String(40))
+    duration = db.Column(db.Integer)
+    recurl = db.Column(db.String(140))
+    
+    def __init__(self, sid, status, duration, recurl):
+        self.sid = sid
+        self.status = status
+        self.duration = duration
+        self.recurl = recurl
+    
+    def __repr__(self):
+        return "<Note ('%s', '%s', '%s', '%s')>" % (self.sid, self.status, self.duration, self.recurl)
+
+
 
 
 # Voice Request URL
