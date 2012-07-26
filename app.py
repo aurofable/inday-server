@@ -190,4 +190,4 @@ if __name__ == '__main__':
     if port == 5000:
         app.debug = True
     app.run(host='0.0.0.0', port=port)
-    db.create_all()
+    #db.create_all()
