@@ -17,7 +17,7 @@ import random
 app = Flask(__name__, static_url_path='/static')
 app.config.from_pyfile('local_settings.py')
 db = SQLAlchemy(app)
-db.create_all()
+
 
 # Class for DB
 class Note(db.Model):
@@ -138,12 +138,12 @@ def trans():
     return str(response)
    
 # Database
-@app.route('/data', methods=['GET'])
+@app.route('/data', methods=['GET', 'POST'])
 def data():
     print 'Database view!'
     print str([Note.query.all()])
-    print "Should have printed the queries!"
-    if (len([Note.query.all()]) == 0):
+    print 'Should have printed the queries!'
+    if (len(Note.query.all()) == 0):
         print 'Database empty'
         return 'Database empty'
     return jsonify(values=[i.serialize for i in Note.query.all()]) 
