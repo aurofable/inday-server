@@ -13,6 +13,8 @@ from twilio.util import TwilioCapability
 import string
 import random
 
+from datetime import datetime
+
 # Declare and configure application
 app = Flask(__name__, static_url_path='/static')
 app.config.from_pyfile('local_settings.py')
@@ -26,15 +28,17 @@ class Note(db.Model):
     status = db.Column(db.String(40))
     duration = db.Column(db.Integer)
     recurl = db.Column(db.String(140))
+    dateTime = db.Column(db.String(80))
     
-    def __init__(self, sid, status, duration, recurl):
+    def __init__(self, sid, status, duration, recurl, dateTime):
         self.sid = sid
         self.status = status
         self.duration = duration
         self.recurl = recurl
+        self.dateTime = dateTime
     
     def __repr__(self):
-        return "('sid', '%s'), ('status', '%s'), ('duration', '%s'), ('recurl','%s')" % (self.sid, self.status, self.duration, self.recurl)
+        return "('sid', '%s'), ('status', '%s'), ('duration', '%s'), ('recurl','%s'), ('datetime', '%s')" % (self.sid, self.status, self.duration, self.recurl, self.dateTime)
 
     @property
     def serialize(self):
@@ -44,7 +48,8 @@ class Note(db.Model):
             'sid'       : self.sid,
             'status'    : self.status,
             'duration'  : self.duration,
-            'recurl'    : self.recurl
+            'recurl'    : self.recurl,
+            'dateTime'  : self.dateTime
         }
 
 
@@ -118,7 +123,9 @@ def trans():
         duration = request.form['DialCallDuration']
         sid = request.form['DialCallSid']
         status = request.form['DialCallStatus']
-    
+
+    dateTime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
     if (recURL == None): 
         recURL = "asdfsadfadsf"
@@ -129,7 +136,7 @@ def trans():
     if (status == None):
         status = "Error"
     
-    note = Note(sid, status, duration, recURL)
+    note = Note(sid, status, duration, recURL, dateTime)
     db.session.add(note)
     db.session.commit()
 
@@ -150,7 +157,15 @@ def clear():
    for note in Note.query.all():
        db.session.delete(note)
    db.session.commit()
-   return 'Databse Cleared'
+   return 'Database Cleared'
+
+# Reset Database
+@app.route('/reset', methods=['GET', 'POST'])
+def reset():
+    db.drop_all()
+    db.create_all()
+    db.session.commit()
+    return 'Database Reset'
 
 # Index page
 @app.route('/')
