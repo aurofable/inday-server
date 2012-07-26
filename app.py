@@ -141,6 +141,8 @@ def trans():
 @app.route('/data', methods=['GET'])
 def data():
     print 'Database view!'
+    if (len([Note.query.all()]) == 0):
+        return 'Database empty'
     return jsonify(values=[i.serialize for i in Note.query.all()]) 
 
 # Index page
