@@ -141,7 +141,8 @@ def trans():
 @app.route('/data', methods=['GET'])
 def data():
     print 'Database view!'
-    print [Note.query.all()]
+    print str([Note.query.all()])
+    print "Should have printed the queries!"
     if (len([Note.query.all()]) == 0):
         print 'Database empty'
         return 'Database empty'
