@@ -4,11 +4,14 @@ from flask import Flask
 from flask import render_template
 from flask import url_for
 from flask import request
+from flask import jsonify
 from flask.ext.sqlalchemy import SQLAlchemy
 
 from twilio import twiml
 from twilio.util import TwilioCapability
 
+import string
+import random
 
 # Declare and configure application
 app = Flask(__name__, static_url_path='/static')
@@ -31,8 +34,18 @@ class Note(db.Model):
         self.recurl = recurl
     
     def __repr__(self):
-        return "<Note ('%s', '%s', '%s', '%s')>" % (self.sid, self.status, self.duration, self.recurl)
+        return "('sid', '%s'), ('status', '%s'), ('duration', '%s'), ('recurl','%s')" % (self.sid, self.status, self.duration, self.recurl)
 
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id'        : self.id,
+            'sid'       : self.sid,
+            'status'    : self.status,
+            'duration'  : self.duration,
+            'recurl'    : self.recurl
+        }
 
 
 
@@ -49,8 +62,6 @@ def voice():
     response.say("Logged In")
     response.dial(action = actionURL, callerId = caller_id, number = from_client_number, record = True)
     print 'Phone number from client is ' + str(from_client_number)
-    print str(response)
-    print '\n'
     return str(response)
 
 
@@ -108,22 +119,29 @@ def trans():
         sid = request.form['DialCallSid']
         status = request.form['DialCallStatus']
     
-    recURL = "asdfsadfadsf"
-    duration = 5
-    sid = "asdkfsadlkjfadsf"
-    status = "testing"
+    chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
+    if (recURL == None): 
+        recURL = "asdfsadfadsf"
+    if (duration == None):
+        duration = 5
+    if (sid == None):
+        sid = ''.join(random.choice(chars) for x in range(10))
+    if (status == None):
+        status = "Error"
     
     note = Note(sid, status, duration, recURL)
     db.session.add(note)
     db.session.commit()
 
-    print note
-    print Note.query.all()
-
     response = twiml.Response()
     response.say("Recorded")
     return str(response)
-    
+   
+# Database
+@app.route('/data', methods=['GET'])
+def data():
+    print 'Database view!'
+    return jsonify(values=[i.serialize for i in Note.query.all()]) 
 
 # Index page
 @app.route('/')
@@ -132,7 +150,8 @@ def index():
         'voice_request_url': url_for('.voice', _external=True),
         'client_url': url_for('.client', _external=True),
         'auth_url': url_for('.auth', _external=True),
-        'trans_url': url_for('.trans', _external=True)}
+        'trans_url': url_for('.trans', _external=True),
+        'data_url' : url_for('.data', _external=True)}
     return render_template('index.html', params=params)
 
 
