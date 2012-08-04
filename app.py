@@ -134,7 +134,7 @@ def trans():
 
     chars = string.ascii_uppercase + string.digits + string.ascii_lowercase
     if (recURL == None): 
-        recURL = "asdfsadfadsf"
+        recURL = "asdfsadfadsfasdasd"
     if (duration == None):
         duration = 5
     if (sid == None):
